@@ -1,0 +1,236 @@
+================================================================================
+CAR MAINTENANCE TRACKER - BACKLOG ANALYSIS SUMMARY
+================================================================================
+
+PROJECT OVERVIEW:
+- Car Maintenance Tracker MVP application
+- Tracks time-based and km-based maintenance intervals
+- No authentication for MVP
+- Dockerized architecture (frontend, backend, database)
+
+TOTAL ISSUES: 14 (numbered #0 through #13)
+
+ISSUES BREAKDOWN:
+================================================================================
+
+PHASE 0: INFRASTRUCTURE (1 issue)
+----------------------------------
+Issue #0: Project Infrastructure & Docker Setup
+  Backend:  Health check endpoint, database setup
+  Frontend: Base layout, routing, API client
+  DevOps:   Docker compose, Dockerfiles for all services
+
+PHASE 1: SETUP PAGE (4 issues) 
+----------------------------------
+Issue #1: List Part Maintenance Templates
+  Backend:  GET /setup endpoint
+  Frontend: Display templates list, empty state
+
+Issue #2: Create New Part Maintenance Template  
+  Backend:  POST /setup endpoint with validation
+  Frontend: Add template form with validation
+
+Issue #3: Edit Part Maintenance Template
+  Backend:  PUT /setup/{id} endpoint
+  Frontend: Inline edit functionality
+
+Issue #4: Archive and Restore Part Maintenance Templates
+  Backend:  PUT /setup/{id}/archive, PUT /setup/{id}/restore
+  Frontend: Archive/restore buttons with confirmation
+
+PHASE 2: CARS MANAGEMENT (5 issues)
+----------------------------------
+Issue #5: List All Cars
+  Backend:  GET /cars endpoint with maintenance items
+  Frontend: Display cars with maintenance items
+
+Issue #6: Create New Car
+  Backend:  POST /cars endpoint
+  Frontend: Add car form with template customization
+
+Issue #7: Edit Car Details
+  Backend:  PUT /cars/{id} endpoint  
+  Frontend: Edit car and maintenance items page
+
+Issue #8: Track Maintenance Change
+  Backend:  POST /trackchange/{carMaintenanceItemId}
+  Frontend: Track change modal/form
+
+Issue #9: Display Track Change History
+  Backend:  Enhanced GET /cars with history
+  Frontend: Expandable history per maintenance item
+
+PHASE 3: DASHBOARD (2 issues)
+----------------------------------
+Issue #10: Dashboard - Car Selection and Status Display
+  Backend:  GET /dashboard/{carId} with status calculation
+  Frontend: Status groups (overdue/due soon/OK), car dropdown
+
+Issue #11: Dashboard - Update Car Mileage
+  Backend:  PATCH /cars/{id}/km endpoint
+  Frontend: Inline km edit on dashboard
+
+PHASE 4: POLISH & TESTING (2 issues)
+----------------------------------
+Issue #12: Error Handling and User Feedback
+  Backend:  Standardized errors, logging
+  Frontend: Toast notifications, loading states
+
+Issue #13: Testing and Documentation
+  Backend:  Unit tests, integration tests, API docs
+  Frontend: Component tests, E2E tests, user guide
+
+================================================================================
+API ENDPOINTS SUMMARY (12 total)
+================================================================================
+
+Setup/Templates:
+- GET /setup
+- POST /setup
+- PUT /setup/{id}
+- PUT /setup/{id}/archive
+- PUT /setup/{id}/restore
+
+Cars:
+- GET /cars
+- POST /cars
+- PUT /cars/{id}
+- PATCH /cars/{id}/km
+
+Track Changes:
+- POST /trackchange/{carMaintenanceItemId}
+
+Dashboard:
+- GET /dashboard/{carId}
+
+Health:
+- GET /health
+
+================================================================================
+DATABASE MODELS (4 total)
+================================================================================
+
+1. MaintenanceItemTemplate
+   - id, name, intervalType, intervalValue, archived, createdAt
+
+2. Car
+   - id, name, currentKm, createdAt
+
+3. CarMaintenanceItem
+   - id, carId, maintenanceTemplateId, lastServiceKm, lastServiceDate,
+     intervalValue, intervalType, calculatedNextKm, calculatedNextDate
+
+4. TrackChange
+   - id, carMaintenanceItemId, km, date, createdAt
+
+================================================================================
+DOCKER SERVICES
+================================================================================
+
+Frontend:  localhost:3000 (external) | frontend:3000 (internal)
+Backend:   localhost:8000 (external) | backend:8000 (internal)  
+Database:  postgres://database:5432 (internal only)
+
+================================================================================
+KEY FEATURES
+================================================================================
+
+✓ Manage part maintenance templates (CRUD + archive/restore)
+✓ Register and manage multiple cars
+✓ Customize maintenance intervals per car
+✓ Track maintenance service changes (km or date-based)
+✓ View maintenance history for each part
+✓ Dashboard with color-coded status (overdue/due soon/OK)
+✓ Quick mileage updates from dashboard
+
+================================================================================
+VALIDATION RULES
+================================================================================
+
+Frontend:
+- Date format: dd/mm/yyyy (dd ≤ 31, mm ≤ 12, yyyy ≥ 2000)
+- Km values: >= 0
+- Interval values: > 0
+- Interval type: dropdown (km / time only)
+
+Backend:
+- Parse dd/mm/yyyy to datetime
+- Calculate next service based on interval type
+- Sort all lists by createdAt DESC (newest first)
+
+Status Calculation:
+- Km-based: Red (≥nextKm), Yellow (<300km), Green (≥300km)
+- Time-based: Red (≥nextDate), Yellow (<30 days), Green (≥30 days)
+
+================================================================================
+DEVELOPMENT TIMELINE (Estimated)
+================================================================================
+
+1 Developer Full-time:  3-4 weeks
+2 Developers Parallel:  2-3 weeks
+
+Week-by-Week:
+- Week 1: Infrastructure (#0)
+- Week 2: Setup page (#1-4)
+- Week 3: Cars management (#5-7)
+- Week 4: Track changes + Dashboard (#8-11)
+- Week 5: Polish + Testing (#12-13)
+
+================================================================================
+ISSUE DEPENDENCIES
+================================================================================
+
+#0 → #1 → #2, #3, #4 → #5 → #6, #7, #8 → #9, #10 → #11
+
+#12 and #13 can be worked on anytime during development
+
+================================================================================
+SUCCESS CRITERIA
+================================================================================
+
+✅ Phase 0: Docker containers running, health endpoint responds
+✅ Phase 1: Can create, edit, archive templates via UI
+✅ Phase 2: Can create cars, assign maintenance, track changes
+✅ Phase 3: Dashboard shows color-coded status
+✅ Phase 4: Tests passing, documentation complete
+
+================================================================================
+DELIVERABLES
+================================================================================
+
+Created Files:
+1. BACKLOG.md (21KB)
+   - Detailed issue specifications with backend/frontend work
+   - Complete API contracts and data models
+   - Docker integration notes
+
+2. BACKLOG_QUICK_REFERENCE.md (8.6KB)
+   - Quick summary of all issues
+   - API endpoint reference
+   - Dependencies and timeline
+
+3. GITHUB_ISSUES_GUIDE.md (9.7KB)
+   - GitHub issue template
+   - Labels and workflow setup
+   - Sprint planning suggestions
+
+4. README.md (Updated)
+   - Project overview
+   - Links to all documentation
+   - Quick start guide
+
+5. ProjectVisionAndScope.md (Existing, 13KB)
+   - Original project vision and requirements
+
+================================================================================
+NEXT STEPS
+================================================================================
+
+1. Review all documentation files
+2. Create GitHub labels (backend, frontend, priority, phase)
+3. Create GitHub project board
+4. Create GitHub issues using GITHUB_ISSUES_GUIDE.md templates
+5. Start with Issue #0 (Infrastructure Setup)
+6. Follow phase order for development
+
+================================================================================
