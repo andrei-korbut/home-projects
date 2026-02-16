@@ -1,0 +1,197 @@
+[
+  {
+    "title": "Backend: Setup database schema and models",
+    "body": "## Description\nCreate database schema and Entity Framework Core models for the Car Maintenance Tracker application.\n\n## Models to Create\n1. **MaintenanceItemTemplate**\n   - id (int, PK, auto-generated)\n   - name (string, required)\n   - intervalType (string, required, 'km' or 'time')\n   - intervalValue (int, required)\n   - archived (bool, default: false)\n   - createdAt (datetime, auto-generated)\n\n2. **Car**\n   - id (int, PK, auto-generated)\n   - name (string, required)\n   - currentKm (int, required)\n   - createdAt (datetime, auto-generated)\n\n3. **CarMaintenanceItem**\n   - id (int, PK, auto-generated)\n   - carId (int, FK to Car)\n   - maintenanceTemplateId (int, FK to MaintenanceItemTemplate)\n   - lastServiceKm (int, nullable)\n   - lastServiceDate (datetime, nullable)\n   - intervalValue (int, required)\n   - intervalType (string, required)\n   - calculatedNextKm (int, computed)\n   - calculatedNextDate (datetime, computed)\n\n4. **TrackChange**\n   - id (int, PK, auto-generated)\n   - carMaintenanceItemId (int, FK to CarMaintenanceItem)\n   - km (int, nullable)\n   - date (datetime, nullable)\n\n## Tasks\n- [ ] Setup .NET 8 Web API project\n- [ ] Install Entity Framework Core and SQL Server packages\n- [ ] Create DbContext\n- [ ] Create model classes\n- [ ] Configure relationships and constraints\n- [ ] Create initial migration\n- [ ] Apply migration to database\n\n## Technology\n- .NET 8 Web API\n- Entity Framework Core\n- SQL Server",
+    "labels": ["backend", "database", "setup"]
+  },
+  {
+    "title": "Backend: Implement GET /setup endpoint",
+    "body": "## Description\nImplement backend endpoint to retrieve list of maintenance item templates.\n\n## Endpoint Details\n- **Method:** GET\n- **Path:** `/setup`\n- **Response:** List of MaintenanceItemTemplate objects\n\n## Requirements\n- Return all non-archived templates by default\n- Sort by createdAt descending (newest first)\n- Return JSON array of templates\n\n## Response Example\n```json\n[\n  {\n    \"id\": 1,\n    \"name\": \"Oil Change\",\n    \"intervalType\": \"km\",\n    \"intervalValue\": 10000,\n    \"archived\": false,\n    \"createdAt\": \"2026-01-15T10:30:00Z\"\n  }\n]\n```\n\n## Tasks\n- [ ] Create SetupController\n- [ ] Implement GET /setup action\n- [ ] Add query to filter non-archived templates\n- [ ] Add sorting by createdAt descending\n- [ ] Test endpoint with Swagger\n\n## Technology\n- .NET 8 Web API\n- Entity Framework Core",
+    "labels": ["backend", "api", "setup"]
+  },
+  {
+    "title": "Backend: Implement POST /setup endpoint",
+    "body": "## Description\nImplement backend endpoint to create a new maintenance item template.\n\n## Endpoint Details\n- **Method:** POST\n- **Path:** `/setup`\n- **Request Body:** MaintenanceItemTemplate (without id, createdAt, archived)\n\n## Request Body Example\n```json\n{\n  \"name\": \"Oil Change\",\n  \"intervalType\": \"km\",\n  \"intervalValue\": 10000\n}\n```\n\n## Requirements\n- Validate required fields (name, intervalType, intervalValue)\n- Validate intervalType is either 'km' or 'time'\n- Validate intervalValue > 0\n- Auto-generate id and createdAt\n- Set archived to false by default\n- Return created template with 201 status\n\n## Tasks\n- [ ] Create POST action in SetupController\n- [ ] Add model validation\n- [ ] Save to database\n- [ ] Return created entity\n- [ ] Test with Swagger\n\n## Technology\n- .NET 8 Web API\n- Entity Framework Core",
+    "labels": ["backend", "api", "setup"]
+  },
+  {
+    "title": "Backend: Implement PUT /setup/{id} endpoint",
+    "body": "## Description\nImplement backend endpoint to update an existing maintenance item template.\n\n## Endpoint Details\n- **Method:** PUT\n- **Path:** `/setup/{id}`\n- **Path Parameter:** id (int) - Template ID\n- **Request Body:** Updated template fields\n\n## Request Body Example\n```json\n{\n  \"name\": \"Oil Change Updated\",\n  \"intervalType\": \"time\",\n  \"intervalValue\": 365\n}\n```\n\n## Requirements\n- Find template by id\n- Return 404 if not found\n- Validate all fields\n- Update only provided fields\n- Preserve createdAt and id\n- Return updated template\n\n## Tasks\n- [ ] Create PUT action in SetupController\n- [ ] Add template lookup logic\n- [ ] Add validation\n- [ ] Update entity\n- [ ] Test with Swagger\n\n## Technology\n- .NET 8 Web API\n- Entity Framework Core",
+    "labels": ["backend", "api", "setup"]
+  },
+  {
+    "title": "Backend: Implement PUT /setup/{id}/archive endpoint",
+    "body": "## Description\nImplement backend endpoint to archive a maintenance item template.\n\n## Endpoint Details\n- **Method:** PUT\n- **Path:** `/setup/{id}/archive`\n- **Path Parameter:** id (int) - Template ID\n\n## Requirements\n- Find template by id\n- Return 404 if not found\n- Set archived flag to true\n- Save changes\n- Return success response\n\n## Tasks\n- [ ] Create PUT archive action in SetupController\n- [ ] Add template lookup logic\n- [ ] Set archived to true\n- [ ] Test with Swagger\n\n## Technology\n- .NET 8 Web API\n- Entity Framework Core",
+    "labels": ["backend", "api", "setup"]
+  },
+  {
+    "title": "Backend: Implement PUT /setup/{id}/restore endpoint",
+    "body": "## Description\nImplement backend endpoint to restore an archived maintenance item template.\n\n## Endpoint Details\n- **Method:** PUT\n- **Path:** `/setup/{id}/restore`\n- **Path Parameter:** id (int) - Template ID\n\n## Requirements\n- Find template by id\n- Return 404 if not found\n- Set archived flag to false\n- Save changes\n- Return success response\n\n## Tasks\n- [ ] Create PUT restore action in SetupController\n- [ ] Add template lookup logic\n- [ ] Set archived to false\n- [ ] Test with Swagger\n\n## Technology\n- .NET 8 Web API\n- Entity Framework Core",
+    "labels": ["backend", "api", "setup"]
+  },
+  {
+    "title": "Frontend: Setup React application with Vite and Tailwind CSS",
+    "body": "## Description\nInitialize the frontend React application with Vite, Tailwind CSS, and routing.\n\n## Requirements\n- Create React app using Vite\n- Install and configure Tailwind CSS\n- Setup react-router-dom for routing\n- Install Axios for API calls\n- Create basic app structure\n\n## Routes to Setup\n- `/setup` - Maintenance templates page\n- `/cars` - Cars list page\n- `/cars/new` - Add new car page\n- `/cars/{id}/edit` - Edit car page\n- `/dashboard` - Dashboard page\n\n## Tasks\n- [ ] Run `npm create vite@latest` with React template\n- [ ] Install Tailwind CSS\n- [ ] Configure Tailwind in project\n- [ ] Install react-router-dom\n- [ ] Install Axios\n- [ ] Setup basic routing structure\n- [ ] Create Layout component\n- [ ] Create navigation menu\n- [ ] Test routing works\n\n## Technology\n- React (JavaScript)\n- Vite\n- Tailwind CSS\n- react-router-dom\n- Axios",
+    "labels": ["frontend", "setup"]
+  },
+  {
+    "title": "Frontend: Create Setup/Templates page - List and Display",
+    "body": "## Description\nCreate the `/setup` page to display list of maintenance item templates.\n\n## Features\n- Display list of templates from GET /setup endpoint\n- Show \"No templates available\" message when empty\n- Display template cards with:\n  - Name\n  - Interval Type (km/time)\n  - Interval Value with proper label (km or days)\n  - Created date\n- Sort by newest first (handled by backend)\n- Add loading state\n- Add error handling\n\n## Tasks\n- [ ] Create SetupPage component\n- [ ] Create TemplateCard component\n- [ ] Implement API call to GET /setup\n- [ ] Display templates in a list/grid\n- [ ] Add loading spinner\n- [ ] Add error message display\n- [ ] Style with Tailwind CSS\n- [ ] Test with backend API\n\n## API Integration\n- **Endpoint:** GET /setup\n- **Backend URL:** Will be configured via Docker environment\n\n## Technology\n- React\n- Tailwind CSS\n- Axios",
+    "labels": ["frontend", "setup", "ui"]
+  },
+  {
+    "title": "Frontend: Create Setup page - Add Template functionality",
+    "body": "## Description\nImplement functionality to add new maintenance item templates on the `/setup` page.\n\n## Features\n- \"Add Template\" button at the top of the page\n- When clicked, show editable fields:\n  - Name (text input, required)\n  - Interval Type (dropdown: km/time, required)\n  - Interval Value (number input, required, label changes based on type)\n- Save and Cancel buttons\n- Validation:\n  - Name required: \"Name is obligatory field\"\n  - Interval Type required: \"Interval type is obligatory field\"\n  - Interval Value required: \"Interval value is obligatory field\"\n  - Interval Value must be > 0\n- Highlight invalid fields in red\n- On success, add to list and clear form\n- On cancel, hide form without saving\n\n## Tasks\n- [ ] Create AddTemplate component/form\n- [ ] Add \"Add Template\" button\n- [ ] Implement form state management\n- [ ] Add validation logic\n- [ ] Implement POST /setup API call\n- [ ] Handle success and error responses\n- [ ] Update template list after creation\n- [ ] Style form with Tailwind CSS\n- [ ] Test complete flow\n\n## API Integration\n- **Endpoint:** POST /setup\n- **Backend URL:** Will be configured via Docker environment\n\n## Technology\n- React\n- Tailwind CSS\n- Axios",
+    "labels": ["frontend", "setup", "ui", "forms"]
+  },
+  {
+    "title": "Frontend: Create Setup page - Edit Template functionality",
+    "body": "## Description\nImplement inline editing functionality for maintenance item templates.\n\n## Features\n- Pencil/edit icon button for each template\n- When clicked, transform fields to editable inputs\n- Show Save and Cancel buttons\n- Same validation as Add Template\n- On save, call PUT /setup/{id}\n- On cancel, revert to display mode\n- Update list on success\n\n## Tasks\n- [ ] Add edit button to TemplateCard\n- [ ] Implement edit mode state\n- [ ] Transform fields to inputs in edit mode\n- [ ] Add validation\n- [ ] Implement PUT /setup/{id} API call\n- [ ] Handle success and error responses\n- [ ] Update template in list\n- [ ] Test edit flow\n\n## API Integration\n- **Endpoint:** PUT /setup/{id}\n- **Backend URL:** Will be configured via Docker environment\n\n## Technology\n- React\n- Tailwind CSS\n- Axios",
+    "labels": ["frontend", "setup", "ui", "forms"]
+  },
+  {
+    "title": "Frontend: Create Setup page - Archive/Restore Template functionality",
+    "body": "## Description\nImplement archive and restore functionality for maintenance item templates.\n\n## Features\n- Archive button for non-archived templates\n- Restore button for archived templates\n- Show confirmation dialog when archiving\n- On confirm, call PUT /setup/{id}/archive\n- For restore, call PUT /setup/{id}/restore\n- Update UI after action\n- Show archived templates separately or with visual indicator\n\n## Tasks\n- [ ] Add Archive/Restore buttons to TemplateCard\n- [ ] Create confirmation dialog component\n- [ ] Implement PUT /setup/{id}/archive API call\n- [ ] Implement PUT /setup/{id}/restore API call\n- [ ] Handle success and error responses\n- [ ] Update template list\n- [ ] Add visual indication for archived templates\n- [ ] Test archive and restore flows\n\n## API Integration\n- **Endpoint:** PUT /setup/{id}/archive\n- **Endpoint:** PUT /setup/{id}/restore\n- **Backend URL:** Will be configured via Docker environment\n\n## Technology\n- React\n- Tailwind CSS\n- Axios",
+    "labels": ["frontend", "setup", "ui"]
+  },
+  {
+    "title": "Backend: Implement GET /cars endpoint",
+    "body": "## Description\nImplement backend endpoint to retrieve list of cars with their maintenance items.\n\n## Endpoint Details\n- **Method:** GET\n- **Path:** `/cars`\n- **Response:** List of Cars with attached CarMaintenanceItems\n\n## Requirements\n- Return all cars sorted by createdAt descending\n- Include non-archived maintenance items for each car\n- Include calculated next service km/date\n- Sort maintenance items by createdAt descending\n\n## Response Example\n```json\n[\n  {\n    \"id\": 1,\n    \"name\": \"Honda Civic\",\n    \"currentKm\": 50000,\n    \"createdAt\": \"2026-01-15T10:30:00Z\",\n    \"maintenanceItems\": [\n      {\n        \"id\": 1,\n        \"maintenanceTemplateId\": 1,\n        \"templateName\": \"Oil Change\",\n        \"intervalType\": \"km\",\n        \"intervalValue\": 10000,\n        \"lastServiceKm\": 45000,\n        \"calculatedNextKm\": 55000\n      }\n    ]\n  }\n]\n```\n\n## Tasks\n- [ ] Create CarsController\n- [ ] Implement GET /cars action\n- [ ] Add query to include maintenance items\n- [ ] Filter non-archived items\n- [ ] Add sorting logic\n- [ ] Calculate next service values\n- [ ] Test endpoint with Swagger\n\n## Technology\n- .NET 8 Web API\n- Entity Framework Core",
+    "labels": ["backend", "api", "cars"]
+  },
+  {
+    "title": "Backend: Implement POST /cars endpoint",
+    "body": "## Description\nImplement backend endpoint to create a new car with maintenance items.\n\n## Endpoint Details\n- **Method:** POST\n- **Path:** `/cars`\n- **Request Body:** Car info with maintenance items\n\n## Request Body Example\n```json\n{\n  \"name\": \"Honda Civic\",\n  \"currentKm\": 50000,\n  \"maintenanceItems\": [\n    {\n      \"maintenanceTemplateId\": 1,\n      \"intervalValue\": 10000,\n      \"intervalType\": \"km\",\n      \"lastServiceKm\": 45000\n    },\n    {\n      \"maintenanceTemplateId\": 2,\n      \"intervalValue\": 365,\n      \"intervalType\": \"time\",\n      \"lastServiceDate\": \"2025-12-01\"\n    }\n  ]\n}\n```\n\n## Requirements\n- Validate car name and currentKm\n- Create car record\n- Create CarMaintenanceItem for each template\n- Calculate next service km/date\n- Return created car with items\n\n## Tasks\n- [ ] Create POST action in CarsController\n- [ ] Add validation logic\n- [ ] Create car entity\n- [ ] Create maintenance items\n- [ ] Calculate next service values\n- [ ] Save to database\n- [ ] Return created entity\n- [ ] Test with Swagger\n\n## Technology\n- .NET 8 Web API\n- Entity Framework Core",
+    "labels": ["backend", "api", "cars"]
+  },
+  {
+    "title": "Backend: Implement PUT /cars/{id} endpoint",
+    "body": "## Description\nImplement backend endpoint to update car information and maintenance items.\n\n## Endpoint Details\n- **Method:** PUT\n- **Path:** `/cars/{id}`\n- **Path Parameter:** id (int) - Car ID\n- **Request Body:** Updated car and maintenance items\n\n## Request Body Example\n```json\n{\n  \"name\": \"Honda Civic 2020\",\n  \"currentKm\": 52000,\n  \"maintenanceItems\": [\n    {\n      \"id\": 1,\n      \"intervalValue\": 12000,\n      \"lastServiceKm\": 48000\n    }\n  ]\n}\n```\n\n## Requirements\n- Find car by id (404 if not found)\n- Update car name and currentKm\n- Update maintenance items\n- Recalculate next service values\n- Return updated car\n\n## Tasks\n- [ ] Create PUT action in CarsController\n- [ ] Add car lookup logic\n- [ ] Add validation\n- [ ] Update car entity\n- [ ] Update maintenance items\n- [ ] Recalculate next service\n- [ ] Test with Swagger\n\n## Technology\n- .NET 8 Web API\n- Entity Framework Core",
+    "labels": ["backend", "api", "cars"]
+  },
+  {
+    "title": "Backend: Implement PUT /cars/{id}/km endpoint",
+    "body": "## Description\nImplement backend endpoint to update only the current km/mileage for a car (used in dashboard).\n\n## Endpoint Details\n- **Method:** PUT\n- **Path:** `/cars/{id}/km`\n- **Path Parameter:** id (int) - Car ID\n- **Request Body:** { \"currentKm\": number }\n\n## Request Body Example\n```json\n{\n  \"currentKm\": 52500\n}\n```\n\n## Requirements\n- Find car by id (404 if not found)\n- Validate currentKm >= 0\n- Update only currentKm field\n- Return updated car\n\n## Tasks\n- [ ] Create PUT /km action in CarsController\n- [ ] Add car lookup logic\n- [ ] Add validation\n- [ ] Update currentKm only\n- [ ] Test with Swagger\n\n## Technology\n- .NET 8 Web API\n- Entity Framework Core",
+    "labels": ["backend", "api", "cars", "dashboard"]
+  },
+  {
+    "title": "Backend: Implement POST /trackchange/{carMaintenanceItemId} endpoint",
+    "body": "## Description\nImplement backend endpoint to record a maintenance change for a car maintenance item.\n\n## Endpoint Details\n- **Method:** POST\n- **Path:** `/trackchange/{carMaintenanceItemId}`\n- **Path Parameter:** carMaintenanceItemId (int)\n- **Request Body:** Change details (km or date)\n\n## Request Body Example\n```json\n{\n  \"km\": 52000\n}\n```\nor\n```json\n{\n  \"date\": \"2026-02-15\"\n}\n```\n\n## Requirements\n- Find CarMaintenanceItem by id (404 if not found)\n- Create TrackChange record\n- Update lastServiceKm or lastServiceDate in CarMaintenanceItem\n- Recalculate next service km/date\n- Return updated maintenance item\n\n## Logic\n- If intervalType is 'km', update lastServiceKm\n- If intervalType is 'time', update lastServiceDate\n- calculatedNextKm = lastServiceKm + intervalValue\n- calculatedNextDate = lastServiceDate + intervalValue (days)\n\n## Tasks\n- [ ] Create TrackChangeController\n- [ ] Implement POST action\n- [ ] Add item lookup logic\n- [ ] Create TrackChange record\n- [ ] Update CarMaintenanceItem\n- [ ] Recalculate next service\n- [ ] Test with Swagger\n\n## Technology\n- .NET 8 Web API\n- Entity Framework Core",
+    "labels": ["backend", "api", "trackchange"]
+  },
+  {
+    "title": "Backend: Implement GET /dashboard/{carId} endpoint",
+    "body": "## Description\nImplement backend endpoint to retrieve dashboard data for a specific car with maintenance items grouped by status.\n\n## Endpoint Details\n- **Method:** GET\n- **Path:** `/dashboard/{carId}`\n- **Path Parameter:** carId (int) - Car ID\n\n## Response Example\n```json\n{\n  \"car\": {\n    \"id\": 1,\n    \"name\": \"Honda Civic\",\n    \"currentKm\": 52000\n  },\n  \"maintenanceGroups\": {\n    \"overdue\": [\n      {\n        \"id\": 1,\n        \"name\": \"Oil Change\",\n        \"intervalType\": \"km\",\n        \"intervalValue\": 10000,\n        \"lastServiceKm\": 45000,\n        \"calculatedNextKm\": 55000,\n        \"status\": \"overdue\",\n        \"daysUntilDue\": null,\n        \"kmUntilDue\": -2000\n      }\n    ],\n    \"dueSoon\": [],\n    \"ok\": []\n  }\n}\n```\n\n## Status Calculation Logic\n- **Km-based:**\n  - Overdue: currentKm >= calculatedNextKm\n  - Due Soon: calculatedNextKm - currentKm <= 300\n  - OK: calculatedNextKm - currentKm > 300\n- **Time-based:**\n  - Overdue: today >= calculatedNextDate\n  - Due Soon: calculatedNextDate - today <= 30 days\n  - OK: calculatedNextDate - today > 30 days\n\n## Tasks\n- [ ] Create DashboardController\n- [ ] Implement GET /dashboard/{carId} action\n- [ ] Add car lookup with maintenance items\n- [ ] Implement status calculation logic\n- [ ] Group items by status\n- [ ] Calculate kmUntilDue / daysUntilDue\n- [ ] Test with Swagger\n\n## Technology\n- .NET 8 Web API\n- Entity Framework Core",
+    "labels": ["backend", "api", "dashboard"]
+  },
+  {
+    "title": "Frontend: Create Cars page - List view",
+    "body": "## Description\nCreate the `/cars` page to display list of cars with their maintenance items.\n\n## Features\n- Display list of cars from GET /cars endpoint\n- Show \"No cars available\" message when empty\n- For each car, display:\n  - Car name\n  - Current km/mileage\n  - List of maintenance items with:\n    - Part name\n    - Interval info (type and value)\n    - Last service (km or date)\n    - Next service (km or date)\n    - Track Change button\n- \"Add Car\" button to navigate to /cars/new\n- Edit button for each car (navigate to /cars/{id}/edit)\n- Sort by newest first (handled by backend)\n\n## Tasks\n- [ ] Create CarsPage component\n- [ ] Create CarCard component\n- [ ] Create MaintenanceItemRow component\n- [ ] Implement API call to GET /cars\n- [ ] Display cars in a list\n- [ ] Add loading and error states\n- [ ] Add navigation buttons\n- [ ] Style with Tailwind CSS\n- [ ] Test with backend API\n\n## API Integration\n- **Endpoint:** GET /cars\n- **Backend URL:** Will be configured via Docker environment\n\n## Technology\n- React\n- Tailwind CSS\n- Axios\n- react-router-dom",
+    "labels": ["frontend", "cars", "ui"]
+  },
+  {
+    "title": "Frontend: Create Add Car page (/cars/new)",
+    "body": "## Description\nCreate the `/cars/new` page to add a new car with maintenance items.\n\n## Features\n- Form to add car:\n  - Car Name (text input, required)\n  - Current Mileage/Km (number input, required)\n- Load all templates from GET /setup\n- For each template, show editable fields:\n  - Template name (read-only)\n  - Interval (number, default from template, editable, required)\n  - Last service (km or date based on intervalType, required)\n  - Date input: masked input dd/mm/yyyy\n  - Km input: number >= 0\n- Validation:\n  - All required fields\n  - Date format: dd/mm/yyyy (dd ≤ 31, mm ≤ 12, yyyy ≥ 2000)\n  - Km must be >= 0\n  - Interval must be > 0\n- Save button: POST to /cars\n- Cancel button: navigate back to /cars\n- On success: redirect to /cars\n\n## Tasks\n- [ ] Create AddCarPage component\n- [ ] Create masked date input component\n- [ ] Load templates from GET /setup\n- [ ] Build form with car and maintenance fields\n- [ ] Add validation logic\n- [ ] Implement POST /cars API call\n- [ ] Handle success (redirect) and error\n- [ ] Style with Tailwind CSS\n- [ ] Test complete flow\n\n## API Integration\n- **Endpoint:** GET /setup (to load templates)\n- **Endpoint:** POST /cars (to create car)\n- **Backend URL:** Will be configured via Docker environment\n\n## Technology\n- React\n- Tailwind CSS\n- Axios\n- react-router-dom",
+    "labels": ["frontend", "cars", "ui", "forms"]
+  },
+  {
+    "title": "Frontend: Create Edit Car page (/cars/{id}/edit)",
+    "body": "## Description\nCreate the `/cars/{id}/edit` page to edit car information and maintenance items.\n\n## Features\n- Load car data from GET /cars (filter by id)\n- Form to edit:\n  - Car Name (text input, required)\n  - Current Mileage/Km (number input, required)\n- For each maintenance item:\n  - Template name (read-only)\n  - Interval (number, editable, required)\n  - Last service (km or date, editable, required)\n  - Same validation as Add Car page\n- Save button: PUT to /cars/{id}\n- Cancel button: navigate back to /cars\n- On success: redirect to /cars\n\n## Tasks\n- [ ] Create EditCarPage component\n- [ ] Load car data on mount\n- [ ] Populate form with existing data\n- [ ] Reuse masked date input component\n- [ ] Add validation logic\n- [ ] Implement PUT /cars/{id} API call\n- [ ] Handle success (redirect) and error\n- [ ] Style with Tailwind CSS\n- [ ] Test edit flow\n\n## API Integration\n- **Endpoint:** GET /cars (to load car data)\n- **Endpoint:** PUT /cars/{id} (to update car)\n- **Backend URL:** Will be configured via Docker environment\n\n## Technology\n- React\n- Tailwind CSS\n- Axios\n- react-router-dom",
+    "labels": ["frontend", "cars", "ui", "forms"]
+  },
+  {
+    "title": "Frontend: Implement Track Change functionality",
+    "body": "## Description\nImplement the Track Change feature for maintenance items (used in both Cars page and Dashboard).\n\n## Features\n- Track Change button for each maintenance item\n- When clicked, show modal/form with:\n  - For km-based: input field with current car km pre-filled\n  - For time-based: masked date input field (dd/mm/yyyy)\n  - Option to use current km or enter custom km\n  - Save and Cancel buttons\n- Validation:\n  - Km must be >= 0\n  - Date must be valid dd/mm/yyyy format\n- On save: POST to /trackchange/{carMaintenanceItemId}\n- On success: update UI and close modal\n\n## Tasks\n- [ ] Create TrackChangeModal component\n- [ ] Add \"Track Change\" button to maintenance items\n- [ ] Implement modal state management\n- [ ] Pre-fill form based on intervalType\n- [ ] Add validation\n- [ ] Implement POST /trackchange/{id} API call\n- [ ] Handle success and error\n- [ ] Update item in list after tracking\n- [ ] Style modal with Tailwind CSS\n- [ ] Test track change flow\n\n## API Integration\n- **Endpoint:** POST /trackchange/{carMaintenanceItemId}\n- **Backend URL:** Will be configured via Docker environment\n\n## Technology\n- React\n- Tailwind CSS\n- Axios",
+    "labels": ["frontend", "cars", "dashboard", "ui", "forms"]
+  },
+  {
+    "title": "Frontend: Create Dashboard page - Main view",
+    "body": "## Description\nCreate the `/dashboard` page to display maintenance items grouped by status.\n\n## Features\n- Dropdown to select car (default: first car)\n- Display current car mileage with inline edit\n- Show maintenance items grouped by status:\n  - 🔴 Overdue (red)\n  - 🟡 Due Soon (yellow)\n  - 🟢 OK (green)\n- For each item display:\n  - Part name\n  - Interval info\n  - Next due (km or date)\n  - Days/Km until due\n  - Track Change button\n- Load data from GET /dashboard/{carId}\n- Update when car selection changes\n\n## Tasks\n- [ ] Create DashboardPage component\n- [ ] Create StatusGroup component\n- [ ] Create car dropdown/select\n- [ ] Implement API call to GET /dashboard/{carId}\n- [ ] Display items grouped by status\n- [ ] Add visual indicators for status\n- [ ] Reuse TrackChangeModal component\n- [ ] Add loading and error states\n- [ ] Style with Tailwind CSS\n- [ ] Test with backend API\n\n## API Integration\n- **Endpoint:** GET /cars (to load car list for dropdown)\n- **Endpoint:** GET /dashboard/{carId}\n- **Backend URL:** Will be configured via Docker environment\n\n## Technology\n- React\n- Tailwind CSS\n- Axios",
+    "labels": ["frontend", "dashboard", "ui"]
+  },
+  {
+    "title": "Frontend: Dashboard - Inline edit current mileage",
+    "body": "## Description\nImplement inline editing of current car mileage on the Dashboard page.\n\n## Features\n- Display current mileage as text\n- Pencil/edit icon button\n- When clicked, transform to input field\n- Save and Cancel buttons\n- Validation: km must be >= 0\n- On save: PUT to /cars/{id}/km\n- Update display on success\n\n## Tasks\n- [ ] Add edit button to mileage display\n- [ ] Implement edit mode state\n- [ ] Transform to input in edit mode\n- [ ] Add validation\n- [ ] Implement PUT /cars/{id}/km API call\n- [ ] Handle success and error\n- [ ] Update mileage in display\n- [ ] Test edit flow\n\n## API Integration\n- **Endpoint:** PUT /cars/{id}/km\n- **Backend URL:** Will be configured via Docker environment\n\n## Technology\n- React\n- Tailwind CSS\n- Axios",
+    "labels": ["frontend", "dashboard", "ui", "forms"]
+  },
+  {
+    "title": "Backend: Setup Swagger documentation",
+    "body": "## Description\nEnsure Swagger is properly configured for API documentation and testing.\n\n## Requirements\n- Enable Swagger UI in development\n- Document all endpoints with:\n  - Summary and description\n  - Request/response examples\n  - Parameter descriptions\n  - Response codes\n- Add XML comments to controllers\n- Configure SwaggerGen in Program.cs\n\n## Tasks\n- [ ] Install Swashbuckle.AspNetCore if not present\n- [ ] Enable XML documentation\n- [ ] Add XML comments to all endpoints\n- [ ] Configure Swagger in Program.cs\n- [ ] Test Swagger UI\n- [ ] Verify all endpoints are documented\n\n## Technology\n- .NET 8 Web API\n- Swashbuckle.AspNetCore",
+    "labels": ["backend", "documentation"]
+  },
+  {
+    "title": "DevOps: Create Dockerfile for backend",
+    "body": "## Description\nCreate Dockerfile for the .NET 8 Web API backend application.\n\n## Requirements\n- Multi-stage build (build + runtime)\n- Use official .NET 8 images\n- Expose appropriate port (e.g., 8080)\n- Include environment variables for connection string\n- Optimize for production\n\n## Tasks\n- [ ] Create Dockerfile in backend directory\n- [ ] Setup multi-stage build\n- [ ] Configure connection string via environment variable\n- [ ] Set appropriate port\n- [ ] Test local Docker build\n- [ ] Test running container\n\n## Technology\n- Docker\n- .NET 8",
+    "labels": ["devops", "docker", "backend"]
+  },
+  {
+    "title": "DevOps: Create Dockerfile for frontend",
+    "body": "## Description\nCreate Dockerfile for the React frontend application.\n\n## Requirements\n- Multi-stage build (build + serve)\n- Use Node.js for build stage\n- Use nginx or similar for serving\n- Expose appropriate port (e.g., 80)\n- Configure API URL via environment variable\n- Optimize for production\n\n## Tasks\n- [ ] Create Dockerfile in frontend directory\n- [ ] Setup multi-stage build\n- [ ] Build React app\n- [ ] Configure nginx\n- [ ] Setup API URL environment variable\n- [ ] Test local Docker build\n- [ ] Test running container\n\n## Technology\n- Docker\n- Node.js\n- nginx\n- React",
+    "labels": ["devops", "docker", "frontend"]
+  },
+  {
+    "title": "DevOps: Create docker-compose.yml",
+    "body": "## Description\nCreate docker-compose.yml to orchestrate all services (frontend, backend, database).\n\n## Services\n1. **database** - SQL Server\n   - Use official SQL Server image\n   - Configure password and database name\n   - Persist data with volume\n   - Internal network\n\n2. **backend** - .NET Web API\n   - Build from Dockerfile\n   - Expose API port\n   - Connect to database\n   - Wait for database to be ready\n   - Environment variables for connection string\n\n3. **frontend** - React app\n   - Build from Dockerfile\n   - Expose port 80/443\n   - Environment variable for backend API URL\n   - Depends on backend\n\n## Network Configuration\n- Backend API URL: http://backend:8080\n- Frontend will proxy API calls or use CORS\n\n## Tasks\n- [ ] Create docker-compose.yml in root\n- [ ] Define database service\n- [ ] Define backend service\n- [ ] Define frontend service\n- [ ] Configure networks\n- [ ] Configure volumes\n- [ ] Set environment variables\n- [ ] Test docker-compose up\n- [ ] Test all services communicate\n- [ ] Document environment variables\n\n## Technology\n- Docker Compose\n- SQL Server\n- .NET 8\n- React",
+    "labels": ["devops", "docker"]
+  },
+  {
+    "title": "Documentation: Create README with setup instructions",
+    "body": "## Description\nCreate comprehensive README with project overview and setup instructions.\n\n## Content to Include\n- Project description\n- Features overview\n- Technology stack\n- Prerequisites (Docker, Docker Compose)\n- Setup instructions:\n  - Clone repository\n  - Run with Docker Compose\n  - Access frontend and backend\n  - API documentation (Swagger)\n- Project structure\n- API endpoints reference\n- Development setup (without Docker)\n- Environment variables reference\n- Contributing guidelines\n\n## Tasks\n- [ ] Create/update README.md\n- [ ] Add project description\n- [ ] Add setup instructions\n- [ ] Document environment variables\n- [ ] Add API endpoints summary\n- [ ] Add screenshots (optional)\n- [ ] Add troubleshooting section\n\n## Technology\n- Markdown",
+    "labels": ["documentation"]
+  },
+  {
+    "title": "Testing: Backend unit tests for core business logic",
+    "body": "## Description\nCreate unit tests for backend business logic (optional, good practice).\n\n## Test Coverage\n- Next service calculation logic\n- Status calculation logic\n- Date parsing and validation\n- Model validation\n\n## Tasks\n- [ ] Setup xUnit test project\n- [ ] Create tests for calculation methods\n- [ ] Create tests for status determination\n- [ ] Create tests for validation\n- [ ] Run tests and ensure they pass\n\n## Technology\n- xUnit\n- .NET 8",
+    "labels": ["backend", "testing"]
+  },
+  {
+    "title": "Frontend: Create reusable components library",
+    "body": "## Description\nCreate a library of reusable UI components to maintain consistency.\n\n## Components to Create\n- Button (primary, secondary, danger)\n- Input (text, number, date)\n- Modal/Dialog\n- Card\n- Dropdown/Select\n- Loading Spinner\n- Error Message\n- Confirmation Dialog\n- Form components (FormField, FormGroup)\n\n## Tasks\n- [ ] Create components directory structure\n- [ ] Implement Button component\n- [ ] Implement Input component\n- [ ] Implement Modal component\n- [ ] Implement Card component\n- [ ] Implement Dropdown component\n- [ ] Implement Loading Spinner\n- [ ] Implement Error Message\n- [ ] Style with Tailwind CSS\n- [ ] Document component props\n\n## Technology\n- React\n- Tailwind CSS",
+    "labels": ["frontend", "ui", "components"]
+  },
+  {
+    "title": "Frontend: Create masked date input component",
+    "body": "## Description\nCreate a reusable masked date input component for dd/mm/yyyy format.\n\n## Features\n- Auto-format as user types\n- Mask: dd/mm/yyyy\n- Validation:\n  - dd: 01-31\n  - mm: 01-12\n  - yyyy: >= 2000\n- Visual feedback for invalid input\n- Error messages\n- Integration with form state\n\n## Tasks\n- [ ] Create MaskedDateInput component\n- [ ] Implement masking logic\n- [ ] Add validation\n- [ ] Add error display\n- [ ] Style with Tailwind CSS\n- [ ] Test various date inputs\n- [ ] Document usage\n\n## Technology\n- React\n- Tailwind CSS",
+    "labels": ["frontend", "ui", "components", "forms"]
+  },
+  {
+    "title": "Backend: Add CORS configuration",
+    "body": "## Description\nConfigure CORS to allow frontend to communicate with backend API.\n\n## Requirements\n- Allow frontend origin (configure via environment)\n- Allow credentials\n- Allow common HTTP methods (GET, POST, PUT, DELETE)\n- Allow common headers\n\n## Tasks\n- [ ] Add CORS service in Program.cs\n- [ ] Configure allowed origins\n- [ ] Configure allowed methods\n- [ ] Configure allowed headers\n- [ ] Test from frontend\n\n## Technology\n- .NET 8 Web API\n- CORS middleware",
+    "labels": ["backend", "configuration"]
+  },
+  {
+    "title": "Backend: Add error handling middleware",
+    "body": "## Description\nImplement global error handling middleware for consistent error responses.\n\n## Features\n- Catch all unhandled exceptions\n- Return consistent error response format\n- Log errors\n- Return appropriate HTTP status codes\n- Hide sensitive details in production\n\n## Error Response Format\n```json\n{\n  \"error\": \"Error message\",\n  \"statusCode\": 400,\n  \"timestamp\": \"2026-02-16T10:30:00Z\"\n}\n```\n\n## Tasks\n- [ ] Create error handling middleware\n- [ ] Add exception handling\n- [ ] Format error responses\n- [ ] Add logging\n- [ ] Register middleware in Program.cs\n- [ ] Test error scenarios\n\n## Technology\n- .NET 8 Web API\n- Middleware",
+    "labels": ["backend", "error-handling"]
+  },
+  {
+    "title": "Frontend: Add error handling and loading states",
+    "body": "## Description\nImplement consistent error handling and loading states across all pages.\n\n## Features\n- Loading spinners during API calls\n- Error messages with retry option\n- Toast notifications for success/error\n- Network error handling\n- 404 error pages\n\n## Tasks\n- [ ] Create ErrorBoundary component\n- [ ] Create Toast notification component\n- [ ] Add loading states to all API calls\n- [ ] Add error handling to all API calls\n- [ ] Create 404 page\n- [ ] Test error scenarios\n\n## Technology\n- React\n- Tailwind CSS",
+    "labels": ["frontend", "error-handling", "ui"]
+  },
+  {
+    "title": "Backend: Add logging configuration",
+    "body": "## Description\nConfigure logging for the backend application.\n\n## Requirements\n- Log to console in development\n- Log to file in production\n- Configure log levels\n- Log API requests\n- Log errors\n\n## Tasks\n- [ ] Configure logging in Program.cs\n- [ ] Add Serilog or similar logging library\n- [ ] Configure log levels\n- [ ] Add request logging middleware\n- [ ] Test logging output\n\n## Technology\n- .NET 8 Web API\n- Serilog (or built-in logging)",
+    "labels": ["backend", "logging"]
+  },
+  {
+    "title": "Frontend: Add API service layer",
+    "body": "## Description\nCreate a service layer to centralize API calls and configuration.\n\n## Features\n- Single source for API URL configuration\n- Axios instance with defaults\n- Error handling\n- Request/response interceptors\n- Service methods for each endpoint\n\n## Services to Create\n- SetupService (template endpoints)\n- CarsService (car endpoints)\n- TrackChangeService\n- DashboardService\n\n## Tasks\n- [ ] Create api directory structure\n- [ ] Create axios instance with config\n- [ ] Create SetupService\n- [ ] Create CarsService\n- [ ] Create TrackChangeService\n- [ ] Create DashboardService\n- [ ] Add error interceptor\n- [ ] Update components to use services\n- [ ] Test all API calls\n\n## Technology\n- React\n- Axios",
+    "labels": ["frontend", "api", "architecture"]
+  },
+  {
+    "title": "Frontend: Add form validation helper utilities",
+    "body": "## Description\nCreate reusable validation utilities for form fields.\n\n## Validations to Implement\n- Required field validation\n- Date format validation (dd/mm/yyyy)\n- Number validation (min, max)\n- Custom validation rules\n\n## Tasks\n- [ ] Create validation utilities file\n- [ ] Implement required validation\n- [ ] Implement date validation\n- [ ] Implement number validation\n- [ ] Create validation error messages\n- [ ] Update forms to use validators\n- [ ] Test validations\n\n## Technology\n- React\n- JavaScript",
+    "labels": ["frontend", "forms", "validation"]
+  },
+  {
+    "title": "DevOps: Add .dockerignore files",
+    "body": "## Description\nCreate .dockerignore files to optimize Docker builds.\n\n## Backend .dockerignore\n- bin/\n- obj/\n- .vs/\n- .git/\n- *.md\n\n## Frontend .dockerignore\n- node_modules/\n- .git/\n- dist/\n- build/\n- *.md\n\n## Tasks\n- [ ] Create .dockerignore for backend\n- [ ] Create .dockerignore for frontend\n- [ ] Test Docker build times\n\n## Technology\n- Docker",
+    "labels": ["devops", "docker"]
+  },
+  {
+    "title": "DevOps: Add .gitignore",
+    "body": "## Description\nCreate comprehensive .gitignore file for the project.\n\n## Ignore Patterns\n- .NET: bin/, obj/, *.user\n- React: node_modules/, dist/, build/\n- IDEs: .vs/, .vscode/, .idea/\n- Environment: .env, .env.local\n- Docker: volumes/\n- Database: *.db\n\n## Tasks\n- [ ] Create .gitignore in root\n- [ ] Add .NET patterns\n- [ ] Add React patterns\n- [ ] Add Docker patterns\n- [ ] Test ignored files\n\n## Technology\n- Git",
+    "labels": ["devops", "git"]
+  }
+]
