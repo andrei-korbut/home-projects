@@ -185,3 +185,19 @@ The categories for dashboard will be decided by the backend like more than 1 mon
 - Pagination / filtering for long lists  
 - Calendar UI for date inputs  
 - Advanced dashboard filters / sorting  
+
+## Technology Stack
+
+### Backend
+- .NET 8 Web API (C#)
+- Entity Framework Core
+- SqlServer database
+- RESTful controllers
+- Swagger enabled
+
+### Frontend
+- React (JavaScript)
+- Vite for project scaffolding
+- Tailwind CSS for styling
+- react-router-dom for routing
+- Axios or fetch for API calls
